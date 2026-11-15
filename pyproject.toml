@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[project]
+name = "my-nemo"
+version = "0.1.0"
+description = "marimo製 自分用ツール群"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "marimo>=0.24.2",
+]
+
+[dependency-groups]
+dev = [
+    "go-task-bin>=3.53.1",
+    "import-linter>=2.15",
+    "pymarkdownlnt>=0.9.40",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "pytest-cov>=7.1.0",
+    "pytest-xdist>=3.8.0",
+    "ruff>=0.16.8",
+    "ty>=0.0.82",
+]
+
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+lint.select = [
+    "N",
+    "E",
+    "W",
+    "F",
+    "B",
+    "UP",
+    "SIM",
+    "D100",
+    "D101",
+    "D103",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# marimo セルは末尾の式を出力として表示する / 依存を張るため式文を多用する
+"src/apps/*" = ["B018"]
+
+
+[tool.ty]
+environment.python-version = "3.12"
+src.include = ["src", "tests"]
+rules.possibly-missing-import = "error"
+rules.unused-ignore-comment = "warn"
+rules.redundant-cast = "ignore"
+
+
+[tool.importlinter]
+root_package = "src"
+
+[[tool.importlinter.contracts]]
+name = "モジュール依存関係"
+type = "layers"
+layers = [
+    "src.apps",
+    "src.components",
+    "src.core",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

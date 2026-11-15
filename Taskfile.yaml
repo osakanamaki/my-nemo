@@ -1,0 +1,32 @@
+version: '3'
+
+tasks:
+  default:
+    desc: "タスク一覧"
+    cmds:
+      - task --list
+
+  app:
+    desc: "ツールの起動"
+    env:
+      PYTHONPATH: .
+    cmds:
+      - uv run marimo run src/apps --watch
+
+  lint:
+    desc: "静的解析"
+    cmds:
+      - uv run pymarkdownlnt scan docs/*.md README.md
+      - uv run lint-imports --no-logo
+      - uv run ruff format --check .
+      - uv run ruff check .
+      - uv run ty check
+      - uv run marimo check src/apps/ --fix
+
+  test:
+    desc: "この品質を満たすこと"
+    cmds:
+      - task: lint
+      # ロジックテストのみ網羅する。
+      # GUI層は人間によるレビューを優先する。
+      - uv run pytest -n auto --cov=src/core --cov=src/components --cov-fail-under=95 --cov-report=html:coverage
