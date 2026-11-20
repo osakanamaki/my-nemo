@@ -6,7 +6,8 @@ marimo製 個人利用ツール群
 |---|---|
 |magic_packet|Magic Packet 送信 / RDP 疎通確認ツール|
 
-* 環境構築: `uv sync`
+* 環境構築: `uv sync --compile-bytecode`
+  * --compile-bytecode 起動後のレスポンスタイム向上のために事前コンパイル
 * 起動: `uv run task app`
   * marimoがギャラリーモードで起動する（[→ 公式ガイド](https://docs.marimo.io/guides/apps/#gallery)）。
   * 自動的に立ち上がるブラウザから、ツールを利用できる。
